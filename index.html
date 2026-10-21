@@ -7,19 +7,18 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>"/>
 <style>
   :root{
-    --bg1:#0b1020; --bg2:#101a33;
-    --card:rgba(255,255,255,.055); --card-border:rgba(255,255,255,.12);
-    --txt:#e9edf9; --dim:#9aa7c7; --dim2:#67749b;
-    --acc:#4f7cff; --acc2:#22d3ee; --zh:#ffb454; --ok:#3ddc84; --err:#ff5d6c;
+    --bg:#f4f7fb; --card:#ffffff; --line:#e3e9f2;
+    --txt:#1b2436; --dim:#64748b; --dim2:#94a3b8;
+    --acc:#2f6bff; --acc-soft:#eaf0ff; --ok:#16a34a; --err:#e5484d;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
     background:
-      radial-gradient(1100px 700px at 18% -12%, #17224d 0%, transparent 60%),
-      radial-gradient(900px 650px at 95% 112%, #0c2b3c 0%, transparent 55%),
-      var(--bg1);
+      radial-gradient(900px 500px at 12% -10%, #e7eeff 0%, transparent 55%),
+      radial-gradient(800px 500px at 100% 115%, #e9f4ff 0%, transparent 50%),
+      var(--bg);
     color:var(--txt); min-height:100vh; display:flex; flex-direction:column; align-items:center;
     padding:18px 14px 90px;
   }
@@ -28,64 +27,78 @@
   header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
   .logo{display:flex;align-items:center;gap:10px}
   .logo .icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:22px;
-    background:linear-gradient(135deg,#4f7cff,#22d3ee);box-shadow:0 6px 18px rgba(79,124,255,.35)}
+    background:linear-gradient(135deg,#2f6bff,#4f9dff);box-shadow:0 6px 16px rgba(47,107,255,.3)}
   .logo h1{font-size:20px;font-weight:700;letter-spacing:.5px}
   .logo p{font-size:12px;color:var(--dim);margin-top:2px}
   .status-chip{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);
-    background:var(--card);border:1px solid var(--card-border);padding:7px 12px;border-radius:20px}
+    background:var(--card);border:1px solid var(--line);padding:7px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(27,36,54,.04)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--dim2)}
   .dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 1.4s infinite}
   .dot.err{background:var(--err)}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 
-  nav{display:flex;gap:8px;margin-bottom:14px}
-  nav button{background:var(--card);border:1px solid var(--card-border);color:var(--dim);
-    padding:8px 18px;border-radius:10px;font-size:14px;cursor:pointer;transition:.2s}
-  nav button.active{background:rgba(79,124,255,.18);border-color:var(--acc);color:var(--txt)}
-  nav button:hover{color:var(--txt)}
+  /* 语言方向 */
+  .langbar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .langbar select{appearance:none;-webkit-appearance:none;background:var(--card);border:1px solid var(--line);
+    color:var(--txt);padding:9px 30px 9px 12px;border-radius:12px;font-size:14px;cursor:pointer;
+    box-shadow:0 2px 8px rgba(27,36,54,.05);outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+  .langbar select:focus{border-color:var(--acc)}
+  .swap{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);
+    cursor:pointer;font-size:16px;color:var(--acc);box-shadow:0 2px 8px rgba(27,36,54,.05);transition:.2s;display:grid;place-items:center}
+  .swap:hover{background:var(--acc-soft);border-color:var(--acc)}
+  .langbar .sep{font-size:16px;color:var(--dim2)}
+
+  nav{display:flex;gap:8px;margin-bottom:14px;justify-content:center}
+  nav button{background:transparent;border:1px solid var(--line);color:var(--dim);
+    padding:8px 18px;border-radius:12px;font-size:14px;cursor:pointer;transition:.2s;font-family:inherit}
+  nav button.active{background:var(--card);border-color:var(--acc);color:var(--acc);font-weight:600;
+    box-shadow:0 4px 14px rgba(47,107,255,.15)}
+  nav button:hover{color:var(--acc)}
 
   .panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:760px){.panels{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;
-    backdrop-filter:blur(6px);overflow:hidden;display:flex;flex-direction:column}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 10px 30px rgba(27,36,54,.06);overflow:hidden;display:flex;flex-direction:column}
   .card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
-    border-bottom:1px solid var(--card-border);font-size:12px;color:var(--dim)}
+    border-bottom:1px solid var(--line);font-size:12px;color:var(--dim);background:#fbfcfe}
   .card-head b{font-size:13px;color:var(--txt)}
   .card-head .lang{display:flex;align-items:center;gap:6px}
-  .card-head .lang .flag{font-size:15px}
+  .card-head .flag{font-size:15px}
   .body{flex:1;min-height:280px;max-height:46vh;overflow-y:auto;padding:14px;font-size:17px;line-height:1.7}
   .body .empty{color:var(--dim2);font-size:14px}
-  .zh .body .pending, .en .body .pending{color:var(--acc2);font-style:italic}
-  .en .body .cur{color:#ffd37a}
-  #enText{width:100%;min-height:300px;max-height:46vh;resize:vertical;background:rgba(0,0,0,.25);
-    border:1px solid var(--card-border);border-radius:0 0 14px 14px;color:var(--txt);
+  .pending{color:var(--acc);font-style:italic}
+  #enText{width:100%;min-height:260px;max-height:46vh;resize:vertical;background:#fbfcfe;
+    border:1px solid var(--line);border-radius:0 0 14px 14px;color:var(--txt);
     padding:14px;font-size:16px;line-height:1.7;font-family:inherit}
   #enText:focus{outline:1px solid var(--acc)}
 
   .ctrl{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
   .mic{width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;position:relative;
-    background:linear-gradient(135deg,#4f7cff,#22d3ee);color:#fff;font-size:30px;
-    box-shadow:0 8px 22px rgba(79,124,255,.4);transition:.2s;display:grid;place-items:center}
+    background:linear-gradient(135deg,#2f6bff,#4f9dff);color:#fff;font-size:30px;
+    box-shadow:0 8px 22px rgba(47,107,255,.35);transition:.2s;display:grid;place-items:center}
   .mic:hover{transform:scale(1.05)}
-  .mic.listening{background:linear-gradient(135deg,#ff5d6c,#ff8f4f)}
+  .mic.listening{background:linear-gradient(135deg,#ff5d6c,#ff8f4f);box-shadow:0 8px 22px rgba(255,93,108,.35)}
   .mic.listening::before,.mic.listening::after{content:"";position:absolute;inset:-6px;border-radius:50%;
-    border:2px solid rgba(255,93,108,.6);animation:ring 1.6s ease-out infinite}
+    border:2px solid rgba(255,93,108,.55);animation:ring 1.6s ease-out infinite}
   .mic.listening::after{animation-delay:.8s}
   @keyframes ring{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.5);opacity:0}}
-  .btn{background:var(--card);border:1px solid var(--card-border);color:var(--txt);
-    padding:9px 16px;border-radius:10px;font-size:13px;cursor:pointer;transition:.2s}
-  .btn:hover{border-color:var(--acc)}
-  .btn.primary{background:rgba(79,124,255,.2);border-color:var(--acc)}
-  .btn.on{background:rgba(61,220,132,.18);border-color:var(--ok);color:#aef5cd}
+  .btn{background:var(--card);border:1px solid var(--line);color:var(--txt);
+    padding:9px 16px;border-radius:12px;font-size:13px;cursor:pointer;transition:.2s;font-family:inherit;
+    box-shadow:0 2px 8px rgba(27,36,54,.04)}
+  .btn:hover{border-color:var(--acc);color:var(--acc)}
+  .btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+  .btn.primary:hover{background:#2459e0;color:#fff}
+  .btn.on{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
   .rate{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);background:var(--card);
-    border:1px solid var(--card-border);padding:8px 12px;border-radius:10px}
+    border:1px solid var(--line);padding:8px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(27,36,54,.04)}
   input[type=range]{width:90px;accent-color:var(--acc)}
 
   .hint{margin-top:14px;text-align:center;font-size:12px;color:var(--dim2);line-height:1.8}
   .hint b{color:var(--dim)}
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(120%);
-    background:#1b2440;border:1px solid var(--card-border);color:var(--txt);padding:10px 18px;
-    border-radius:12px;font-size:13px;transition:.3s;z-index:99;max-width:88vw;text-align:center}
+    background:#1b2436;border:1px solid rgba(255,255,255,.1);color:#fff;padding:10px 18px;
+    border-radius:12px;font-size:13px;transition:.3s;z-index:99;max-width:88vw;text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.2)}
   .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -96,32 +109,38 @@
       <div class="icon">🎧</div>
       <div>
         <h1>免费实时同传翻译</h1>
-        <p>English → 中文 · 边说边译 · 永久免费</p>
+        <p id="headerSub">English → 中文 · 边说边译 · 永久免费</p>
       </div>
     </div>
     <div class="status-chip"><span class="dot" id="dot"></span><span id="statusText">待机</span></div>
   </header>
 
+  <div class="langbar">
+    <select id="fromLangSel" title="源语言"></select>
+    <button class="swap" id="swapBtn" title="交换语言方向">⇄</button>
+    <select id="toLangSel" title="目标语言"></select>
+  </div>
+
   <nav>
     <button id="tabSpeech" class="active">🎤 同传模式（语音）</button>
-    <button id="tabText">⌨️ 文本模式</button>
+    <button id="tabText">⌨️ 文本模式（边打边译）</button>
   </nav>
 
   <div id="viewSpeech">
     <div class="panels">
-      <div class="card en">
-        <div class="card-head"><span class="lang"><span class="flag">🇬🇧</span><b>英文原文</b></span><span id="enCount">0 字</span></div>
-        <div class="body" id="enBody"><div class="empty">点击下方「开始同传」，用英语说话即可…</div></div>
+      <div class="card">
+        <div class="card-head"><span class="lang"><span class="flag" id="enFlag">🇬🇧</span><b id="enHead">英文原文</b></span><span id="enCount">0 字</span></div>
+        <div class="body" id="enBody"><div class="empty">点击下方「开始同传」，说出源语言内容即可…</div></div>
       </div>
-      <div class="card zh">
-        <div class="card-head"><span class="lang"><span class="flag">🇨🇳</span><b>中文译文</b></span><span id="zhCount">0 字</span></div>
+      <div class="card">
+        <div class="card-head"><span class="lang"><span class="flag" id="zhFlag">🇨🇳</span><b id="zhHead">中文译文</b></span><span id="zhCount">0 字</span></div>
         <div class="body" id="zhBody"><div class="empty">翻译结果将实时显示在这里…</div></div>
       </div>
     </div>
 
     <div class="ctrl">
       <button class="mic" id="micBtn" title="开始 / 停止同传">🎤</button>
-      <button class="btn" id="ttsBtn">🔊 朗读译文</button>
+      <button class="btn on" id="ttsBtn">🔊 自动朗读译文</button>
       <div class="rate">语速<input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1.0"><span id="rateVal">1.0×</span></div>
       <button class="btn" id="clearBtn">🗑️ 清空</button>
       <button class="btn primary" id="copyBtn">📋 复制译文</button>
@@ -130,24 +149,25 @@
 
   <div id="viewText" style="display:none">
     <div class="card">
-      <div class="card-head"><span class="lang"><span class="flag">🇬🇧</span><b>输入英文（可整段粘贴）</b></span><span id="enTextCount">0 字</span></div>
-      <textarea id="enText" placeholder="在此输入或粘贴英文，点击「翻译为中文」，或按 Ctrl + Enter …"></textarea>
+      <div class="card-head"><span class="lang"><span class="flag" id="enTFlag">🇬🇧</span><b id="enTHead">输入原文（可整段粘贴）</b></span><span id="enTextCount">0 字</span></div>
+      <textarea id="enText" placeholder="在此输入或粘贴原文，下方译文会随输入实时更新…"></textarea>
     </div>
     <div class="ctrl">
-      <button class="btn primary" id="translateBtn">🔄 翻译为中文</button>
+      <button class="btn primary" id="translateBtn">🔄 立即翻译</button>
       <button class="btn" id="speakEnBtn">🔊 朗读原文</button>
       <button class="btn" id="speakZhBtn">🔊 朗读译文</button>
       <button class="btn" id="copyTextBtn">📋 复制译文</button>
+      <button class="btn" id="clearTextBtn">🗑️ 清空</button>
     </div>
     <div class="card" style="margin-top:14px">
-      <div class="card-head"><span class="lang"><span class="flag">🇨🇳</span><b>中文译文</b></span><span id="zhTextCount">0 字</span></div>
-      <div class="body" id="zhTextBody"><div class="empty">译文将显示在这里…</div></div>
+      <div class="card-head"><span class="lang"><span class="flag" id="zhTFlag">🇨🇳</span><b id="zhTHead">目标语言译文</b></span><span id="zhTextCount">0 字</span></div>
+      <div class="body" id="zhTextBody"><div class="empty">译文将随输入实时显示在这里…</div></div>
     </div>
   </div>
 
   <div class="hint">
     全程免费：语音识别 / 朗读由浏览器本地完成，翻译自动在 Google、有道、MyMemory 免费接口间切换，无需注册付费。<br/>
-    建议使用 <b>Chrome / Edge</b> 浏览器获得最佳语音识别体验；若语音无响应，请改用文本模式。
+    语音同传建议使用 <b>Chrome / Edge</b>；边打边译模式随时可用。切换语言方向后，请重新开始同传。
   </div>
 </div>
 
@@ -165,28 +185,60 @@ function toast(msg){
   toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
 }
 
+/* ============ 语言 ============ */
+const LANGS = [
+  { code:'en',    name:'英语', flag:'🇬🇧', sr:'en-US',  tts:'en-US'  },
+  { code:'zh-CN', name:'中文', flag:'🇨🇳', sr:'zh-CN',  tts:'zh-CN'  },
+  { code:'ja',    name:'日语', flag:'🇯🇵', sr:'ja-JP',  tts:'ja-JP'  },
+  { code:'ko',    name:'韩语', flag:'🇰🇷', sr:'ko-KR',  tts:'ko-KR'  },
+  { code:'fr',    name:'法语', flag:'🇫🇷', sr:'fr-FR',  tts:'fr-FR'  },
+  { code:'de',    name:'德语', flag:'🇩🇪', sr:'de-DE',  tts:'de-DE'  },
+  { code:'es',    name:'西班牙语', flag:'🇪🇸', sr:'es-ES',  tts:'es-ES'  },
+  { code:'ru',    name:'俄语', flag:'🇷🇺', sr:'ru-RU',  tts:'ru-RU'  }
+];
+let fromLang = 'en', toLang = 'zh-CN';
+const langInfo = c => LANGS.find(l => l.code === c) || LANGS[0];
+
 /* ============ 翻译引擎（免费，自动切换） ============ */
-async function googleTr(text){
-  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text);
-  const r = await fetch(url);
+/* 带超时的 fetch：某个接口挂起时快速放弃，自动回退下一个 */
+async function fetchT(url, ms){
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms || 6000);
+  try{ return await fetch(url, { signal: ctrl.signal }); }
+  finally{ clearTimeout(timer); }
+}
+async function trGoogle(text, sl, tl){
+  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' + sl + '&tl=' + tl + '&dt=t&q=' + encodeURIComponent(text);
+  const r = await fetchT(url);
   if(!r.ok) throw new Error('google ' + r.status);
   const d = await r.json();
   const t = (d && d[0] ? d[0].map(s => s[0]).join('') : '');
   if(!t) throw new Error('google empty');
   return t;
 }
-async function youdaoTr(text){
-  const url = 'https://fanyi.youdao.com/translate?&doctype=json&type=EN2ZH_CN&i=' + encodeURIComponent(text);
-  const r = await fetch(url);
+const YOUDOA_TYPES = {
+  'en:zh-CN':'EN2ZH_CN','zh-CN:en':'ZH_CN2EN',
+  'ja:zh-CN':'JA2ZH_CN','zh-CN:ja':'ZH_CN2JA',
+  'ko:zh-CN':'KR2ZH_CN','zh-CN:ko':'ZH_CN2KR',
+  'fr:zh-CN':'FR2ZH_CN','zh-CN:fr':'ZH_CN2FR',
+  'de:zh-CN':'DE2ZH_CN','zh-CN:de':'ZH_CN2DE',
+  'es:zh-CN':'ES2ZH_CN','zh-CN:es':'ZH_CN2ES',
+  'ru:zh-CN':'RU2ZH_CN','zh-CN:ru':'ZH_CN2RU'
+};
+async function trYoudao(text, sl, tl){
+  const type = YOUDOA_TYPES[sl + ':' + tl];
+  if(!type) throw new Error('youdao pair');
+  const url = 'https://fanyi.youdao.com/translate?&doctype=json&type=' + type + '&i=' + encodeURIComponent(text);
+  const r = await fetchT(url);
   if(!r.ok) throw new Error('youdao ' + r.status);
   const d = await r.json();
   const t = (d && d.translateResult && d.translateResult[0]) ? d.translateResult[0].map(x => x.tgt).join('') : '';
   if(!t) throw new Error('youdao empty');
   return t;
 }
-async function mymemoryTr(text){
-  const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|zh-CN';
-  const r = await fetch(url);
+async function trMyMemory(text, sl, tl){
+  const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + sl + '|' + tl;
+  const r = await fetchT(url);
   if(!r.ok) throw new Error('mymemory ' + r.status);
   const d = await r.json();
   const t = (d && d.responseData) ? d.responseData.translatedText : '';
@@ -194,24 +246,23 @@ async function mymemoryTr(text){
   return t;
 }
 const ENGINES = [
-  { name: 'Google 翻译', fn: googleTr },
-  { name: '有道翻译',    fn: youdaoTr },
-  { name: 'MyMemory',    fn: mymemoryTr }
+  { name: 'Google 翻译', fn: trGoogle },
+  { name: '有道翻译',    fn: trYoudao },
+  { name: 'MyMemory',    fn: trMyMemory }
 ];
 let engineIdx = 0;
+let engineName = 'Google 翻译';
 async function translate(text){
   if(!text || !text.trim()) return '';
   let lastErr = null;
   for(let i = 0; i < ENGINES.length; i++){
     const idx = (engineIdx + i) % ENGINES.length;
     try{
-      const t = await ENGINES[idx].fn(text);
-      engineIdx = idx;
-      $('#statusText').textContent = '聆听中 · ' + ENGINES[idx].name;
+      const t = await ENGINES[idx].fn(text, fromLang, toLang);
+      engineIdx = idx; engineName = ENGINES[idx].name;
       return t;
     }catch(e){ lastErr = e; }
   }
-  $('#statusText').textContent = '翻译接口暂不可用';
   throw lastErr;
 }
 /* 长文本按句子切块翻译，避免接口超限 */
@@ -231,17 +282,30 @@ async function translateSmart(text){
   return out.trim();
 }
 
-/* ============ 语音识别（同传） ============ */
-function getSR(){
-  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+/* ============ 语音朗读 ============ */
+let ttsOn = true;
+function speak(text, lang){
+  if(!text || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = langInfo(lang).tts;
+  const prefix = u.lang.split('-')[0].toLowerCase();
+  const voices = speechSynthesis.getVoices().filter(v => v.lang.replace(/_/g, '-').toLowerCase().startsWith(prefix));
+  if(voices.length) u.voice = voices.find(v => v.localService) || voices[0];
+  u.rate = parseFloat($('#rate').value) || 1;
+  speechSynthesis.speak(u);
 }
+if('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+
+/* ============ 语音识别（同传） ============ */
+function getSR(){ return window.SpeechRecognition || window.webkitSpeechRecognition || null; }
 let rec = null, micOn = false;
 let srcBuf = '', zhBuf = '', srcChar = 0, liveEn = '', liveZh = '';
 let liveTimer = null;
 
 function setDot(cls, txt){
   const d = $('#dot');
-  d.className = 'dot ' + cls;
+  d.className = 'dot ' + (cls || '');
   $('#statusText').textContent = txt;
 }
 
@@ -255,7 +319,6 @@ function lastCompleteLen(text){
 function render(){
   const enBody = $('#enBody');
   if(srcBuf.trim() || liveEn.trim()){
-    enBody.innerHTML = '<div></div>'; // 保留滚动
     enBody.textContent = '';
     const pre = document.createElement('span'); pre.textContent = srcBuf;
     enBody.appendChild(pre);
@@ -264,7 +327,7 @@ function render(){
       enBody.appendChild(sp);
     }
   }else{
-    enBody.innerHTML = '<div class="empty">点击下方「开始同传」，用英语说话即可…</div>';
+    enBody.innerHTML = '<div class="empty">点击下方「开始同传」，说出源语言内容即可…</div>';
   }
   $('#enCount').textContent = (srcBuf + ' ' + liveEn).trim().length + ' 字';
 
@@ -295,7 +358,7 @@ async function commitNew(){
         const zh = await translateSmart(newSrc);
         if(zh) zhBuf = (zhBuf + ' ' + zh).trim();
         render();
-        if(ttsOn) speak(zh);
+        if(ttsOn) speak(zh, toLang);
       }catch(e){ /* 保留，稍后整段重试 */ }
     }
   }
@@ -315,13 +378,13 @@ function onRecResult(ev){
     clearTimeout(liveTimer);
     liveTimer = setTimeout(async () => {
       try{ liveZh = await translate(liveEn); render(); }catch(e){}
-    }, 450);
+    }, 300); /* 更灵敏的实时译文刷新 */
   }
 }
 
 function makeRec(){
   const r = new (getSR())();
-  r.lang = 'en-US';
+  r.lang = langInfo(fromLang).sr;
   r.continuous = true;
   r.interimResults = true;
   r.onresult = onRecResult;
@@ -331,6 +394,8 @@ function makeRec(){
       toast('麦克风权限被拒绝：请在浏览器中允许使用麦克风，或改用文本模式');
     }else if(e.error === 'network' || e.error === 'no-speech'){
       /* 静默忽略，交给 onend 重启 */
+    }else if(e.error === 'aborted'){
+      /* 主动停止，忽略 */
     }
   };
   r.onend = () => {
@@ -340,7 +405,7 @@ function makeRec(){
       const nr = makeRec(); // 复用旧实例会失败，每次重启都新建
       rec = nr;
       try{ nr.start(); }catch(e){}
-    }, 350); // 保持一直聆听
+    }, 300); // 保持一直聆听
   };
   return r;
 }
@@ -352,7 +417,7 @@ function startRec(){
   micOn = true;
   $('#micBtn').classList.add('listening');
   $('#micBtn').title = '停止同传';
-  setDot('on', '聆听中 · ' + (ENGINES[engineIdx] ? ENGINES[engineIdx].name : '翻译'));
+  setDot('on', '聆听中 · ' + engineName);
   render();
 }
 function stopRec(){
@@ -363,39 +428,74 @@ function stopRec(){
   $('#micBtn').title = '开始同传';
   setDot('', '待机');
 }
-
-/* ============ 语音朗读 ============ */
-let ttsOn = true, zhVoices = [];
-function loadVoices(){ zhVoices = speechSynthesis.getVoices().filter(v => /zh|cmn|yue/i.test(v.lang)); }
-if('speechSynthesis' in window){
-  loadVoices();
-  speechSynthesis.onvoiceschanged = loadVoices;
-}
-function speak(text){
-  if(!text || !('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'zh-CN';
-  if(zhVoices.length) u.voice = zhVoices.find(v => v.localService) || zhVoices[0];
-  u.rate = parseFloat($('#rate').value) || 1;
-  speechSynthesis.speak(u);
+function restartRec(){
+  const wasOn = micOn;
+  if(wasOn){ stopRec(); setTimeout(startRec, 120); }
 }
 
-/* ============ 文本模式 ============ */
-async function translateTextMode(){
-  const src = $('#enText').value.trim();
-  if(!src){ toast('请先输入英文'); return; }
-  const body = $('#zhTextBody');
-  body.innerHTML = '<div class="pending">翻译中…</div>';
-  try{
-    const zh = await translateSmart(src);
-    body.textContent = '';
-    body.textContent = zh;
-    $('#zhTextCount').textContent = zh.length + ' 字';
-    if(ttsOn) speak(zh);
-  }catch(e){
-    body.innerHTML = '<div class="empty" style="color:var(--err)">翻译失败：请检查网络，稍后重试</div>';
+/* ============ 文本模式（边打边译） ============ */
+let textReqId = 0, textDeb = null;
+function renderTextEmpty(){
+  const t = $('#enText').value.trim();
+  if(!t){
+    textReqId++;
+    $('#zhTextBody').innerHTML = '<div class="empty">译文将随输入实时显示在这里…</div>';
+    $('#zhTextCount').textContent = '0 字';
   }
+}
+function onTextInput(){
+  $('#enTextCount').textContent = $('#enText').value.length + ' 字';
+  clearTimeout(textDeb);
+  const t = $('#enText').value.trim();
+  if(!t){ renderTextEmpty(); return; }
+  $('#zhTextBody').innerHTML = '<div class="pending">翻译中…</div>';
+  textDeb = setTimeout(async () => {
+    const id = ++textReqId;
+    try{
+      const zh = await translateSmart(t);
+      if(id === textReqId){
+        $('#zhTextBody').textContent = zh;
+        $('#zhTextCount').textContent = zh.length + ' 字';
+      }
+    }catch(e){
+      if(id === textReqId){
+        $('#zhTextBody').innerHTML = '<div class="empty" style="color:var(--err)">翻译失败：请检查网络，稍后重试</div>';
+      }
+    }
+  }, 600); // 停顿 600ms 后自动翻译
+}
+
+/* ============ 语言方向 ============ */
+function fillLangSelects(){
+  const f = $('#fromLangSel'), t = $('#toLangSel');
+  for(const l of LANGS){
+    f.appendChild(new Option(l.flag + ' ' + l.name, l.code));
+    t.appendChild(new Option(l.flag + ' ' + l.name, l.code));
+  }
+  f.value = fromLang; t.value = toLang;
+}
+function ensureDiff(){
+  if(fromLang === toLang){
+    toLang = (fromLang === 'zh-CN') ? 'en' : 'zh-CN';
+    $('#toLangSel').value = toLang;
+  }
+}
+function applyLangUI(){
+  ensureDiff();
+  const f = langInfo(fromLang), t = langInfo(toLang);
+  $('#fromLangSel').value = fromLang;
+  $('#toLangSel').value = toLang;
+  $('#headerSub').textContent = f.name + ' → ' + t.name + ' · 边说边译 · 永久免费';
+  document.title = '免费实时同传翻译 · ' + f.name + ' → ' + t.name;
+  $('#enFlag').textContent = f.flag; $('#enHead').textContent = f.name + '原文';
+  $('#zhFlag').textContent = t.flag; $('#zhHead').textContent = t.name + '译文';
+  $('#enTFlag').textContent = f.flag; $('#enTHead').textContent = '输入' + f.name + '（可整段粘贴）';
+  $('#zhTFlag').textContent = t.flag; $('#zhTHead').textContent = t.name + '译文';
+  $('#enText').placeholder = '在此输入或粘贴' + f.name + '，下方' + t.name + '译文会随输入实时更新…';
+  liveEn = ''; liveZh = '';
+  clearTimeout(liveTimer);
+  render();
+  if(micOn) restartRec(); // 切换语言后重启识别
 }
 
 /* ============ UI 事件 ============ */
@@ -403,7 +503,7 @@ $('#micBtn').addEventListener('click', () => micOn ? stopRec() : startRec());
 $('#ttsBtn').addEventListener('click', () => {
   ttsOn = !ttsOn;
   $('#ttsBtn').classList.toggle('on', ttsOn);
-  if(!ttsOn) speechSynthesis.cancel();
+  if(!ttsOn && 'speechSynthesis' in window) speechSynthesis.cancel();
 });
 $('#rate').addEventListener('input', () => {
   $('#rateVal').textContent = parseFloat($('#rate').value).toFixed(2) + '×';
@@ -428,18 +528,49 @@ $('#tabText').addEventListener('click', () => {
   $('#tabText').classList.add('active'); $('#tabSpeech').classList.remove('active');
   $('#viewText').style.display = ''; $('#viewSpeech').style.display = 'none';
 });
-$('#translateBtn').addEventListener('click', translateTextMode);
-$('#enText').addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) translateTextMode(); });
-$('#enText').addEventListener('input', () => { $('#enTextCount').textContent = $('#enText').value.length + ' 字'; });
-$('#speakEnBtn').addEventListener('click', () => { const t = $('#enText').value.trim(); if(t){ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=parseFloat($('#rate').value)||1; speechSynthesis.speak(u); } });
-$('#speakZhBtn').addEventListener('click', () => { const t = $('#zhTextBody').textContent.trim(); if(t) speak(t); });
+$('#translateBtn').addEventListener('click', () => {
+  if(!$('#enText').value.trim()){ toast('请先输入原文'); return; }
+  onTextInput();
+});
+$('#enText').addEventListener('input', onTextInput);
+$('#enText').addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) onTextInput(); });
+$('#speakEnBtn').addEventListener('click', () => {
+  const t = $('#enText').value.trim();
+  if(t) speak(t, fromLang);
+  else toast('请先输入原文');
+});
+$('#speakZhBtn').addEventListener('click', () => {
+  const t = $('#zhTextBody').textContent.trim();
+  if(t) speak(t, toLang);
+  else toast('暂无译文可朗读');
+});
 $('#copyTextBtn').addEventListener('click', async () => {
   const t = $('#zhTextBody').textContent.trim();
   if(!t){ toast('暂无译文可复制'); return; }
   try{ await navigator.clipboard.writeText(t); toast('译文已复制 ✓'); }catch(e){ toast('复制失败'); }
 });
+$('#clearTextBtn').addEventListener('click', () => {
+  $('#enText').value = ''; textReqId++;
+  $('#enTextCount').textContent = '0 字';
+  renderTextEmpty();
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+});
+$('#swapBtn').addEventListener('click', () => {
+  const tmp = fromLang; fromLang = toLang; toLang = tmp;
+  applyLangUI();
+});
+$('#fromLangSel').addEventListener('change', e => {
+  fromLang = e.target.value;
+  applyLangUI();
+});
+$('#toLangSel').addEventListener('change', e => {
+  toLang = e.target.value;
+  applyLangUI();
+});
 
 /* 初始状态 */
+fillLangSelects();
+applyLangUI();
 $('#ttsBtn').classList.add('on');
 render();
 </script>
