@@ -388,12 +388,20 @@ function makeRec(){
   r.continuous = true;
   r.interimResults = true;
   r.onresult = onRecResult;
+  let netFail = 0;
   r.onerror = e => {
-    if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+    if(e.error === 'not-allowed'){
       stopRec();
-      toast('麦克风权限被拒绝：请在浏览器中允许使用麦克风，或改用文本模式');
-    }else if(e.error === 'network' || e.error === 'no-speech'){
-      /* 静默忽略，交给 onend 重启 */
+      toast('麦克风未允许：请点地址栏左侧🔒 → 网站设置 → 麦克风 → 允许，然后刷新重试');
+    }else if(e.error === 'service-not-allowed'){
+      stopRec();
+      toast('语音识别服务不可用（可能被浏览器或网络限制），请改用文本模式');
+    }else if(e.error === 'network'){
+      /* 网络受限，连续失败 3 次后停止，避免无提示空转 */
+      netFail++;
+      if(netFail >= 3){ stopRec(); toast('语音识别服务连接失败（网络受限），请改用文本模式'); }
+    }else if(e.error === 'no-speech'){
+      netFail = 0; /* 静默，交给 onend 重启 */
     }else if(e.error === 'aborted'){
       /* 主动停止，忽略 */
     }
